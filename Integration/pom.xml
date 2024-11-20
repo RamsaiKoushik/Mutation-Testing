@@ -58,11 +58,9 @@
                 <!-- </targetTests> -->
                 <mutationOperators>
                     <operator>REMOVE_CONDITIONALS</operator>
-                    <operator>NEGATE_CONDITIONALS</operator>
-                    <operator>INVERT_NEGS</operator>
-                    <operator>MATH</operator>
-                    <operator>RETURN_VALS</operator>
-                    <operator>VOID_METHOD_CALLS</operator>
+                    <operator>REMOVE_READONLY</operator>
+                    <operator>EXPERIMENTAL_SWITCH</operator>
+                    <operator>CONSTRUCTOR_CALLS</operator>
                 </mutationOperators>
                 <outputFormats>
                     <param>HTML</param>

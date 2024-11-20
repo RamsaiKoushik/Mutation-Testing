@@ -2,33 +2,33 @@ package com.example;
 import java.util.*;
 // import java.util.LinkedList;
 public class Graph {
-    public static ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) 
-    { // https://practice.geeksforgeeks.org/problems/bfs-traversal-of-graph/1
-        ArrayList<Integer> result = new ArrayList<>();
-        boolean[] visited = new boolean[V]; // To keep track of visited nodes
-        Queue<Integer> queue = new LinkedList<>(); // Queue for BFS
+    // public static ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) 
+    // { // https://practice.geeksforgeeks.org/problems/bfs-traversal-of-graph/1
+    //     ArrayList<Integer> result = new ArrayList<>();
+    //     boolean[] visited = new boolean[V]; // To keep track of visited nodes
+    //     Queue<Integer> queue = new LinkedList<>(); // Queue for BFS
 
-        // Start BFS from the first node (node 0)
-        queue.add(0);
-        visited[0] = true;
+    //     // Start BFS from the first node (node 0)
+    //     queue.add(0);
+    //     visited[0] = true;
 
-        while (!queue.isEmpty()) 
-        {
-            int current = queue.poll();
-            result.add(current);
+    //     while (!queue.isEmpty()) 
+    //     {
+    //         int current = queue.poll();
+    //         result.add(current);
 
-            // Visit all the neighbors of the current node
-            for (int neighbor : adj.get(current)) 
-            {
-                if (!visited[neighbor]) 
-                {
-                    queue.add(neighbor);
-                    visited[neighbor] = true;
-                }
-            }
-        }
-        return result;
-    }
+    //         // Visit all the neighbors of the current node
+    //         for (int neighbor : adj.get(current)) 
+    //         {
+    //             if (!visited[neighbor]) 
+    //             {
+    //                 queue.add(neighbor);
+    //                 visited[neighbor] = true;
+    //             }
+    //         }
+    //     }
+    //     return result;
+    // }
 
     // public static void dfs(int node, List<List<Integer>> adj, boolean[] visited, List<Integer> result) 
     // {
@@ -57,35 +57,35 @@ public class Graph {
     //     return result;
     // }
 
-    // public static void dfs_province(int node, int[][] isConnected, boolean[] visit) 
-    // {
-    //     visit[node] = true;
-    //     for (int i = 0; i < isConnected.length; i++)
-    //      {
-    //         if (isConnected[node][i] == 1 && !visit[i]) 
-    //         {
-    //             dfs_province(node, isConnected, visit);
-    //         }
-    //     }
-    // }
+    public static void dfs_province(int node, int[][] isConnected, boolean[] visit) 
+    {
+        visit[node] = true;
+        for (int i = 0; i < isConnected.length; i++)
+         {
+            if (isConnected[node][i] == 1 && !visit[i]) 
+            {
+                dfs_province(i, isConnected, visit);
+            }
+        }
+    }
     
-    // public static int findProvinces(int[][] isConnected) 
-    // { //https://leetcode.com/problems/number-of-provinces/
-    //     int n = isConnected.length;
-    //     int numberOfComponents = 0;
-    //     boolean[] visit = new boolean[n];
+    public static int findProvinces(int[][] isConnected) 
+    { //https://leetcode.com/problems/number-of-provinces/
+        int n = isConnected.length;
+        int numberOfComponents = 0;
+        boolean[] visit = new boolean[n];
 
-    //     for (int i = 0; i < n; i++) 
-    //     {
-    //         if (!visit[i])
-    //         {
-    //             numberOfComponents++;
-    //             dfs_province(n, isConnected, visit);
-    //         }
-    //     }
+        for (int i = 0; i < n; i++) 
+        {
+            if (!visit[i])
+            {
+                numberOfComponents++;
+                dfs_province(i, isConnected, visit);
+            }
+        }
 
-    //     return numberOfComponents;
-    // }
+        return numberOfComponents;
+    }
 
     // public static boolean isCycle(ArrayList<ArrayList<Integer>> adj) 
     // { //https://leetcode.com/problems/course-schedule/

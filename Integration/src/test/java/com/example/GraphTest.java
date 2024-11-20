@@ -13,24 +13,40 @@ public class GraphTest {
     }
 
 
+    // @Test
+    // public void bfsOfGraphTest(){   
+    //     // ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
+    //     // adj.add(new ArrayList<Integer>(Arrays.asList(1, 2)));
+    //     // adj.add(new ArrayList<Integer>(Arrays.asList(2, 3)));
+    //     System.out.println("Hello There");
+
+    //     int V = 4;
+    //     ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+    //     for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+
+    //     adj.get(0).add(1);
+    //     adj.get(1).add(2);
+    //     adj.get(2).add(3);
+    //     adj.get(0).add(3);
+    //     ArrayList<Integer> result = Graph.bfsOfGraph(V, adj);
+
+    //     assertEquals("BFS failed for a simple connected graph.",Arrays.asList(0, 1, 3, 2), result);
+    // }
+
     @Test
-    public void bfsOfGraphTest(){   
-        // ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
-        // adj.add(new ArrayList<Integer>(Arrays.asList(1, 2)));
-        // adj.add(new ArrayList<Integer>(Arrays.asList(2, 3)));
-        System.out.println("Hello There");
+    public void testFindProvinces() {
+        // Sample input: Adjacency matrix representing the connections
+        int[][] isConnected = {
+            {1, 1, 0},
+            {1, 1, 0},
+            {0, 0, 1}
+        };
+        // Expected number of provinces
+        int expectedProvinces = 2;
 
-        int V = 4;
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
-
-        adj.get(0).add(1);
-        adj.get(1).add(2);
-        adj.get(2).add(3);
-        adj.get(0).add(3);
-        ArrayList<Integer> result = Graph.bfsOfGraph(V, adj);
-
-        assertEquals("BFS failed for a simple connected graph.",Arrays.asList(0, 1, 3, 2), result);
+        // Call the method and assert the result
+        int result = Graph.findProvinces(isConnected);
+        assertEquals("Number of provinces should match the expected value.",expectedProvinces, result);
     }
 
     // @Test 
