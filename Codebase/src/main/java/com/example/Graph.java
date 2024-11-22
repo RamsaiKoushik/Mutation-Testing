@@ -747,42 +747,124 @@ public class Graph {
         return components - 1;
     }
     
-
-    public static List<List<String>> accountsMerge(List<List<String>> accounts) { //https://leetcode.com/problems/accounts-merge/
-        Map<String, Set<String>> adj = new HashMap<>();
-
-        for(List<String> account : accounts) {
-            String email1 = account.get(1);
-            for(int i = 2; i < account.size(); i++) {
-                String curEmail = account.get(i);
-                adj.computeIfAbsent(email1, k->new HashSet<>()).add(curEmail);
-                adj.computeIfAbsent(curEmail, k->new HashSet<>()).add(email1);
+    public static List<List<String>> accountsMerge(List<List<String>> accounts) {
+        Map<String, Integer> emailToIndex = new HashMap<>();
+        Map<String, String> emailToName = new HashMap<>();
+    
+        int index = 0;
+        for (List<String> account : accounts) {
+            String name = account.get(0);
+            for (int i = 1; i < account.size(); i++) {
+                String email = account.get(i);
+                emailToName.put(email, name);
+                if (!emailToIndex.containsKey(email)) {
+                    emailToIndex.put(email, index++);
+                }
             }
         }
-        Set<String> visited = new HashSet<>();
-        List<List<String>> result = new ArrayList<>();
-
-        for(List<String> account : accounts) {
-            String email1 = account.get(1);
-            if(visited.contains(email1))
-                continue;
-            ArrayList<String> mergedEmails = new ArrayList<>();
-            dfsAccountsMerge(email1, adj, mergedEmails, visited);
-            if(mergedEmails.size() > 1)
-                Collections.sort(mergedEmails);
-            mergedEmails.add(0, account.get(0));//add name
-            result.add(mergedEmails);
+    
+        DisjointSetUnion dsu = new DisjointSetUnion(index);
+        for (List<String> account : accounts) {
+            int firstEmailIndex = emailToIndex.get(account.get(1));
+            for (int i = 2; i < account.size(); i++) {
+                dsu.union(firstEmailIndex, emailToIndex.get(account.get(i)));
+            }
         }
-        return result;
+    
+        Map<Integer, List<String>> components = new HashMap<>();
+        for (String email : emailToIndex.keySet()) {
+            int root = dsu.find(emailToIndex.get(email));
+            components.computeIfAbsent(root, k -> new ArrayList<>()).add(email);
+        }
+    
+        List<List<String>> mergedAccounts = new ArrayList<>();
+        for (List<String> emails : components.values()) {
+            Collections.sort(emails);
+            List<String> account = new ArrayList<>();
+            account.add(emailToName.get(emails.get(0)));
+            account.addAll(emails);
+            mergedAccounts.add(account);
+        }
+    
+        return mergedAccounts;
+    }    
+
+    public static int[] findRedundantConnection(int[][] edges) {
+        int n = edges.length;
+        DisjointSetUnion dsu = new DisjointSetUnion(n + 1);
+    
+        for (int[] edge : edges) {
+            if (!dsu.union(edge[0], edge[1])) {
+                return edge; // Found the redundant edge
+            }
+        }
+    
+        return new int[0];
     }
 
-    public static void dfsAccountsMerge(String email, Map<String, Set<String>> adj, List<String> mergedEmails, Set<String> visited) { 
-        if(visited.contains(email))
-            return;
-        mergedEmails.add(email);
-        visited.add(email);
-        for(String nextEmail : adj.getOrDefault(email, Collections.emptySet())) {
-            dfsAccountsMerge(nextEmail, adj, mergedEmails, visited);
+    public static int largestIsland(int[][] grid) {
+        int n = grid.length;
+        DisjointSetUnion dsu = new DisjointSetUnion(n * n);
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        boolean hasZero = false;
+    
+        // Step 1: Union adjacent 1's
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    for (int[] dir : directions) {
+                        int ni = i + dir[0], nj = j + dir[1];
+                        if (ni >= 0 && ni < n && nj >= 0 && nj < n && grid[ni][nj] == 1) {
+                            dsu.union(i * n + j, ni * n + nj);
+                        }
+                    }
+                } else {
+                    hasZero = true;
+                }
+            }
         }
-    }
+    
+        // Step 2: Find the largest island
+        int maxIsland = 0;
+        Map<Integer, Integer> rootToSize = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    int root = dsu.find(i * n + j);
+                    rootToSize.put(root, dsu.getSize(root));
+                }
+            }
+        }
+    
+        for (int size : rootToSize.values()) {
+            maxIsland = Math.max(maxIsland, size);
+        }
+    
+        // Step 3: Try flipping each 0
+        if (hasZero) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (grid[i][j] == 0) {
+                        Set<Integer> neighboringRoots = new HashSet<>();
+                        int islandSize = 1;
+    
+                        for (int[] dir : directions) {
+                            int ni = i + dir[0], nj = j + dir[1];
+                            if (ni >= 0 && ni < n && nj >= 0 && nj < n && grid[ni][nj] == 1) {
+                                int root = dsu.find(ni * n + nj);
+                                if (!neighboringRoots.contains(root)) {
+                                    neighboringRoots.add(root);
+                                    islandSize += dsu.getSize(root);
+                                }
+                            }
+                        }
+    
+                        maxIsland = Math.max(maxIsland, islandSize);
+                    }
+                }
+            }
+        }
+    
+        return maxIsland;
+    }    
 }

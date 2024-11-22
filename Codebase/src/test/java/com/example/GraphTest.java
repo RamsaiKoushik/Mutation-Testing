@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.*;
 // import src.main.java.com.example.Graph;
 // import java.awt.desktop.ScreenSleepEvent.main
 // import java.awt.desktop.ScreenSleepEvent.
@@ -274,36 +275,64 @@ public class GraphTest {
     }  
 
     @Test
-    public void AccountsMergeTest() {
-        // Input example from LeetCode
-        List<List<String>> accounts = Arrays.asList(
-            Arrays.asList("John", "johnsmith@mail.com", "john00@mail.com"),
-            Arrays.asList("John", "johnnybravo@mail.com"),
-            Arrays.asList("John", "johnsmith@mail.com", "john_newyork@mail.com"),
-            Arrays.asList("Mary", "mary@mail.com")
-        );
+    public void testAccountsMerge() {
+        List<List<String>> accounts = new ArrayList<>();
+        accounts.add(Arrays.asList("John", "johnsmith@mail.com", "john00@mail.com"));
+        accounts.add(Arrays.asList("John", "johnnybravo@mail.com"));
+        accounts.add(Arrays.asList("John", "johnsmith@mail.com", "john_newyork@mail.com"));
+        accounts.add(Arrays.asList("Mary", "mary@mail.com"));
 
-        // Expected output
         List<List<String>> expected = Arrays.asList(
             Arrays.asList("John", "john00@mail.com", "john_newyork@mail.com", "johnsmith@mail.com"),
             Arrays.asList("John", "johnnybravo@mail.com"),
             Arrays.asList("Mary", "mary@mail.com")
         );
 
-        // Sort each list in the expected and result to ensure order doesn't cause test failure
-        expected.forEach(Collections::sort);
-
-        // Call the method to test
         List<List<String>> result = Graph.accountsMerge(accounts);
 
-        // Sort each list in the result
-        result.forEach(Collections::sort);
+        // Convert to Set for comparison as order in lists may differ
+        Set<Set<String>> expectedSet = new HashSet<>();
+        for (List<String> group : expected) {
+            expectedSet.add(new HashSet<>(group));
+        }
 
-        // Sort the outer lists as well to ensure the correct order of accounts
-        expected.sort(Comparator.comparing(a -> a.get(0)));
-        result.sort(Comparator.comparing(a -> a.get(0)));
+        Set<Set<String>> resultSet = new HashSet<>();
+        for (List<String> group : result) {
+            resultSet.add(new HashSet<>(group));
+        }
 
-        // Assert that the result matches the expected output
-        assertEquals(expected, result);
+        assertEquals(expectedSet, resultSet);
+    }
+
+    @Test
+    public void testFindRedundantConnection() {
+        int[][] edges1 = {{1, 2}, {1, 3}, {2, 3}};
+        int[] expected1 = {2, 3};
+        assertArrayEquals(expected1, Graph.findRedundantConnection(edges1));
+
+        int[][] edges2 = {{1, 2}, {2, 3}, {3, 4}, {4, 1}, {1, 5}};
+        int[] expected2 = {4, 1};
+        assertArrayEquals(expected2, Graph.findRedundantConnection(edges2));
+    }
+
+    @Test
+    public void testLargestIsland() {
+        int[][] grid1 = {
+            {1, 0},
+            {0, 1}
+        };
+        assertEquals(3, Graph.largestIsland(grid1));
+
+        int[][] grid2 = {
+            {1, 1},
+            {1, 0}
+        };
+        assertEquals(4, Graph.largestIsland(grid2));
+
+        int[][] grid3 = {
+            {1, 1},
+            {1, 1}
+        };
+        assertEquals(4, Graph.largestIsland(grid3));
     }
 }
