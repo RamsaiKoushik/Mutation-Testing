@@ -107,7 +107,7 @@ public class Graph {
         {
             if(!vis[i])
             {
-                if(help(adj,vis,i,-1))
+                if(isCyclehelp(adj,vis,i,-1))
                 {
                     return true;
                 }
@@ -115,49 +115,14 @@ public class Graph {
         }
         return false;
     }
-    public static boolean help(ArrayList<ArrayList<Integer>> adj,boolean[] vis,int curr,int parent)
+    public static boolean isCyclehelp(ArrayList<ArrayList<Integer>> adj,boolean[] vis,int curr,int parent)
     {
         vis[curr] = true;
         for(int nei : adj.get(curr))
         {
             if(!vis[nei])
             {
-                if(help(adj,vis,nei,curr))
-                {
-                    return true;
-                }
-            }
-            else if(vis[nei] && nei!=parent)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isCycledfs(ArrayList<ArrayList<Integer>> adj) 
-    { // https://leetcode.com/problems/course-schedule/
-        boolean[] vis = new boolean[adj.size()];
-        for(int i =0; i < adj.size();i++)
-        {
-            if(!vis[i])
-            {
-                if(helpisCycledfs(adj,vis,i,-1))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    public static boolean helpisCycledfs(ArrayList<ArrayList<Integer>> adj,boolean[] vis,int curr,int parent)
-    {
-        vis[curr] = true;
-        for(int nei : adj.get(curr))
-        {
-            if(!vis[nei])
-            {
-                if(help(adj,vis,nei,curr))
+                if(isCyclehelp(adj,vis,nei,curr))
                 {
                     return true;
                 }
@@ -222,7 +187,7 @@ public class Graph {
     }
 
 
-    public static void dfs(char[][] board, int i, int j) 
+    public static void surroundedRegionsHelp(char[][] board, int i, int j)
     {
         int m = board.length;
         int n = board[0].length;
@@ -234,11 +199,11 @@ public class Graph {
             int jy = j + d[1];
             if (ix > 0 && ix < m - 1 && jy > 0 && jy < n - 1 && board[ix][jy] == 'O') 
             {
-                dfs(board, ix, jy);
+                surroundedRegionsHelp(board, ix, jy);
             }
         }
     }
-    public static void solve(char[][] board) 
+    public static void surroundedRegions(char[][] board) 
     { // https://leetcode.com/problems/surrounded-regions/
         int m = board.length;
         if (m == 0) return;
@@ -252,7 +217,7 @@ public class Graph {
                 {
                     if (board[i][j] == 'O') 
                     {
-                        dfs(board, i, j);
+                        surroundedRegionsHelp(board, i, j);
                     }
                 }
             }
@@ -374,82 +339,82 @@ public class Graph {
         return distances;
     }
     
-    public static boolean isBipartite(ArrayList<ArrayList<Integer>> graph) 
-    { //https://leetcode.com/problems/is-graph-bipartite/
-        int[] colors = new int[graph.size()];
-        Arrays.fill(colors,-1);
-        for(int i=0;i<graph.size();i++)
-        {
-            if(colors[i]==-1)
-            {
-                if(!dfs(graph,colors,i))
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+    // public static boolean isBipartite(ArrayList<ArrayList<Integer>> graph) 
+    // { //https://leetcode.com/problems/is-graph-bipartite/
+    //     int[] colors = new int[graph.size()];
+    //     Arrays.fill(colors,-1);
+    //     for(int i=0;i<graph.size();i++)
+    //     {
+    //         if(colors[i]==-1)
+    //         {
+    //             if(!dfs(graph,colors,i))
+    //             {
+    //                 return false;
+    //             }
+    //         }
+    //     }
+    //     return true;
+    // }
 
-    public static boolean dfs(ArrayList<ArrayList<Integer>> graph,int[] colors,int node)
-    {
-        colors[node] = 1;
-        for(int adjacent_node : graph.get(node))
-        {
-            if(colors[adjacent_node]==-1)
-            {
-                colors[adjacent_node] = 1-colors[node];
-                if(!dfs(graph,colors,adjacent_node))
-                {
-                    return false;
-                }
-            }
-            else if(colors[adjacent_node]==colors[node])
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+    // public static boolean dfs(ArrayList<ArrayList<Integer>> graph,int[] colors,int node)
+    // {
+    //     colors[node] = 1;
+    //     for(int adjacent_node : graph.get(node))
+    //     {
+    //         if(colors[adjacent_node]==-1)
+    //         {
+    //             colors[adjacent_node] = 1-colors[node];
+    //             if(!dfs(graph,colors,adjacent_node))
+    //             {
+    //                 return false;
+    //             }
+    //         }
+    //         else if(colors[adjacent_node]==colors[node])
+    //         {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 
-    public static boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj)
-    { //https://leetcode.com/problems/course-schedule-ii/
-        boolean[] visited = new boolean[V];
-        boolean[] recursionCallStack = new boolean[V];
-        
-        Arrays.fill(visited,false);
-        Arrays.fill(recursionCallStack,false);
-        
-        for(int i=0;i<V;i++)
-        {
-            if(!visited[i] && isCyclic(adj,visited,recursionCallStack,i))
-            {
+    private static boolean isBipartiteHelper(int source, int[] color, List<List<Integer>> graph) {
+        for (int neighbor : graph.get(source)) {
+            if (color[neighbor] == 0) {
+                color[neighbor] = (color[source] == 1) ? 2 : 1;
+
+                if (isBipartiteHelper(neighbor, color, graph)) {
+                    return true;
+                }
+            } else if (color[neighbor] == color[source]) {
                 return true;
             }
         }
         return false;
     }
-    
-    public static boolean isCyclic(ArrayList<ArrayList<Integer>> graph, boolean[]visited,boolean[] recursionCallStack,int vertice)
-    {
-        visited[vertice] = true;
-        recursionCallStack[vertice] = true;
 
-        for(int adjacent_node : graph.get(vertice)){
-            if(!visited[adjacent_node] )
-            { 
-                if(isCyclic(graph,visited,recursionCallStack,adjacent_node))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                return recursionCallStack[adjacent_node];
+    public static boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        int[] color = new int[n];
+        List<List<Integer>> adjacencyList = new ArrayList<>();
+
+        // Convert adjacency matrix to adjacency list
+        for (int i = 0; i < n; i++) {
+            adjacencyList.add(new ArrayList<>());
+            for (int neighbor : graph[i]) {
+                adjacencyList.get(i).add(neighbor);
             }
         }
-        recursionCallStack[vertice] = false;
-        return false;
+
+        for (int i = 0; i < n; i++) {
+            if (color[i] == 0) {
+                color[i] = 1;
+                if (isBipartiteHelper(i, color, adjacencyList)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
 
@@ -760,14 +725,14 @@ public class Graph {
         return res;
     }
 
-    public static int dfs(int u, List<Integer>[] graph, boolean[] visited) { //https://leetcode.com/problems/number-of-provinces/
+    private static int makeConnectedHelper(int u, List<Integer>[] graph, boolean[] visited) {
         if (visited[u]) return 0;
         visited[u] = true;
-        for (int v : graph[u]) dfs(v, graph, visited);
+        for (int v : graph[u]) makeConnectedHelper(v, graph, visited);
         return 1;
     }
 
-    public static int makeConnected(int n, int[][] connections) {
+    public static int makeConnected(int n, int[][] connections) { //https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
         if (connections.length < n - 1) return -1;
         List<Integer>[] graph = new List[n];
         for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();
@@ -778,7 +743,7 @@ public class Graph {
         
         int components = 0;
         boolean[] visited = new boolean[n];
-        for (int v = 0; v < n; v++) components += dfs(v, graph, visited);
+        for (int v = 0; v < n; v++) components += makeConnectedHelper(v, graph, visited);
         return components - 1;
     }
     

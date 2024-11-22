@@ -14,6 +14,8 @@ import java.util.List;
 // import src.main.java.com.example.GraphUnit;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 
 public class GraphTest {
@@ -93,27 +95,27 @@ public class GraphTest {
         assertEquals("Failed to find cycle in a graph.",true, result);
     }
 
-    @Test
-    public void isCycledfsTest(){
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
-        adj.get(0).add(1);
-        adj.get(1).add(2);
-        adj.get(2).add(3);
-        boolean result = Graph.isCycledfs(adj);
-        assertEquals("Failed to find cycle in a graph.",false, result);
-    }
+    // @Test
+    // public void isCycledfsTest(){
+    //     ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+    //     for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
+    //     adj.get(0).add(1);
+    //     adj.get(1).add(2);
+    //     adj.get(2).add(3);
+    //     boolean result = Graph.isCycledfs(adj);
+    //     assertEquals("Failed to find cycle in a graph.",false, result);
+    // }
 
-    @Test 
-    public void isCycledfsTest2(){
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < 3; i++) adj.add(new ArrayList<>());
-        adj.get(0).add(1);
-        adj.get(1).add(2);
-        adj.get(2).add(0);
-        boolean result = Graph.isCycledfs(adj);
-        assertEquals("Failed to find cycle in a graph.",true, result);
-    }
+    // @Test 
+    // public void isCycledfsTest2(){
+    //     ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+    //     for (int i = 0; i < 3; i++) adj.add(new ArrayList<>());
+    //     adj.get(0).add(1);
+    //     adj.get(1).add(2);
+    //     adj.get(2).add(0);
+    //     boolean result = Graph.isCycledfs(adj);
+    //     assertEquals("Failed to find cycle in a graph.",true, result);
+    // }
 
     @Test
     public void orangesRottingTest(){
@@ -123,9 +125,9 @@ public class GraphTest {
     }
 
     @Test
-    public void solveTest(){
+    public void surroundedRegionsTest(){
         char[][] board = {{'X','X','X','X'},{'X','O','O','X'},{'X','X','O','X'},{'X','O','X','X'}};
-        Graph.solve(board);
+        Graph.surroundedRegions(board);
         char[][] expected = {{'X','X','X','X'},{'X','X','X','X'},{'X','X','X','X'},{'X','O','X','X'}};
         assertArrayEquals(expected, board);
     }
@@ -147,48 +149,53 @@ public class GraphTest {
         assertArrayEquals(expected, result);
     }
 
+    @Test
+    public void testIsBipartiteTrue() {
+        // Test Case 1: Bipartite Graph (Should return true)
+        int[][] graph = {
+            {1, 3},
+            {0, 2},
+            {1, 3},
+            {0, 2}
+        };
+        assertTrue("The graph should be bipartite", Graph.isBipartite(graph));
+    }
+
+    @Test
+    public void testIsBipartiteFalse() {
+        // Test Case 2: Non-Bipartite Graph (Should return false)
+        int[][] graph = {
+            {1, 2, 3},
+            {0, 2},
+            {0, 1, 3},
+            {0, 2}
+        };
+        assertFalse("The graph should not be bipartite", Graph.isBipartite(graph));
+    }
+
     // @Test
-    // public void isBipartiteTest(){
+    // public void isCycleTest3(){
     //     ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-    //     // for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
-    //     // adj.get(0).add(1);
-    //     // adj.get(1).add(2);
-    //     // adj.get(2).add(3);
-    //     // adj.get(0).add(3);
-    //     // int [][] arr = {};
-    //     // add 1 to zeroth array
-    //     adj.add(new ArrayList<Integer>(Arrays.asList(1)));
-    //     adj.add(new ArrayList<Integer>(Arrays.asList(2)));
-    //     adj.add(new ArrayList<Integer>(Arrays.asList(3)));
-    //     adj.add(new ArrayList<Integer>(Arrays.asList(0)));
-    //     // adj.add(new ArrayList<Integer>(Arrays.asList(3)));        
-    //     boolean result = Graph.isBipartite(adj);
+    //     for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
+    //     adj.get(0).add(1);
+    //     adj.get(1).add(2);
+    //     adj.get(2).add(3);
+    //     adj.get(3).add(0);
+    //     boolean result = Graph.isCycle(4,adj);
     //     assertEquals(true, result);
     // }
 
-    @Test
-    public void isCycleTest3(){
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
-        adj.get(0).add(1);
-        adj.get(1).add(2);
-        adj.get(2).add(3);
-        adj.get(3).add(0);
-        boolean result = Graph.isCycle(4,adj);
-        assertEquals(true, result);
-    }
-
-    @Test
-    public void isCycleTest4(){
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
-        adj.get(0).add(1);
-        adj.get(1).add(2);
-        adj.get(2).add(3);
-        // adj.get(3).add(1);
-        boolean result = Graph.isCycle(4,adj);
-        assertEquals(false, result);
-    }
+    // @Test
+    // public void isCycleTest4(){
+    //     ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+    //     for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
+    //     adj.get(0).add(1);
+    //     adj.get(1).add(2);
+    //     adj.get(2).add(3);
+    //     // adj.get(3).add(1);
+    //     boolean result = Graph.isCycle(4,adj);
+    //     assertEquals(false, result);
+    // }
 
 
     @Test
@@ -299,16 +306,4 @@ public class GraphTest {
         // Assert that the result matches the expected output
         assertEquals(expected, result);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
