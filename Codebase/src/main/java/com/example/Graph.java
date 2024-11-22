@@ -802,7 +802,7 @@ public class Graph {
             if(visited.contains(email1))
                 continue;
             ArrayList<String> mergedEmails = new ArrayList<>();
-            dfs(email1, adj, mergedEmails, visited);
+            dfsAccountsMerge(email1, adj, mergedEmails, visited);
             if(mergedEmails.size() > 1)
                 Collections.sort(mergedEmails);
             mergedEmails.add(0, account.get(0));//add name
@@ -811,17 +811,13 @@ public class Graph {
         return result;
     }
 
-    public static void dfs(String email, Map<String, Set<String>> adj, List<String> mergedEmails, Set<String> visited) {
+    public static void dfsAccountsMerge(String email, Map<String, Set<String>> adj, List<String> mergedEmails, Set<String> visited) { 
         if(visited.contains(email))
             return;
         mergedEmails.add(email);
         visited.add(email);
         for(String nextEmail : adj.getOrDefault(email, Collections.emptySet())) {
-            dfs(nextEmail, adj, mergedEmails, visited);
+            dfsAccountsMerge(nextEmail, adj, mergedEmails, visited);
         }
     }
-
-
-
-    
 }
