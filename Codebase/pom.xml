@@ -57,32 +57,35 @@
                     <!-- <param>com.example.*</param> Your test package name -->
                 <!-- </targetTests> -->
                 <mutationOperators>
-                    <operator>REMOVE_CONDITIONALS</operator>
-                    <operator>NEGATE_CONDITIONALS</operator>
-                    <operator>INVERT_CONDITIONALS</operator>
                     <operator>CONDITIONAL_BOUNDARY</operator>
-                    <operator>RELATIONAL_OPERATOR_REPLACEMENT</operator>
-                    <operator>ARITHMETIC_OPERATOR_REPLACEMENT</operator>
-                    <operator>LOGICAL_OPERATOR_REPLACEMENT</operator>
+                    <operator>INCREMENTS</operator>
+                    <operator>INVERT_NEGATIVES</operator>
                     <operator>MATH</operator>
-                    <operator>RETURN_VALS</operator>
+                    <operator>NEGATE_CONDITIONALS</operator>
+                    <operator>RETURN_VALUES</operator>
                     <operator>VOID_METHOD_CALLS</operator>
-                    <operator>INVERT_NEGS</operator>
+                    <operator>EMPTY_RETURNS</operator>
+                    <operator>FALSE_RETURNS</operator>
+                    <operator>TRUE_RETURNS</operator>
+                    <operator>NULL_RETURNS</operator>
+                    <operator>PRIMITIVE_RETURNS</operator>
+                    <operator>REMOVE_CONDITIONALS</operator>
+                    <operator>EXPERIMENTAL_SWITCH</operator>
+                    <operator>INLINE_CONSTANT</operator>
+                    <operator>CONSTRUCTOR_CALLS</operator>
+                    <operator>NON_VOID_METHOD_CALLS</operator>
                     <operator>REMOVE_INCREMENTS</operator>
-                    <operator>INCREMENT_DECREMENT_OPERATOR_REPLACEMENT</operator>
-                    <operator>STATEMENT_DELETION</operator>
-                    <operator>ASSIGNMENT_OPERATOR_REPLACEMENT</operator>
-                    <operator>SWITCH_CASE_REPLACEMENT</operator>
-                    <operator>BREAK_STATEMENT_DELETION</operator>
-                    <operator>CONTINUE_STATEMENT_DELETION</operator>
-                    <operator>EXCEPTION_HANDLING_REMOVAL</operator>
-                    <operator>EXCEPTION_THROWING_REPLACEMENT</operator>
-                    <operator>METHOD_CALL_REPLACEMENT</operator>
-                    <operator>CONSTRUCTOR_CALL_REPLACEMENT</operator>
-                    <operator>TYPE_CAST_OPERATOR_REPLACEMENT</operator>
-                    <operator>ARRAY_ACCESS_REPLACEMENT</operator>
-                    <operator>FIELD_ACCESS_REPLACEMENT</operator>
-                    <operator>ENCAPSULATED_ACCESS_REMOVAL</operator>
+                    <operator>EXPERIMENTAL_ARGUMENT_PROPAGATION</operator>
+                    <operator>EXPERIMENTAL_BIG_INTEGER</operator>
+                    <operator>EXPERIMENTAL_MEMBER_VARIABLE</operator>
+                    <operator>EXPERIMENTAL_NAKED_RECEIVER</operator>
+                    <operator>NEGATION</operator>
+                    <operator>ARITHMETIC_OPERATOR_REPLACEMENT</operator>
+                    <operator>ARITHMETIC_OPERATOR_DELETION</operator>
+                    <operator>CONSTANT_REPLACEMENT</operator>
+                    <operator>BITWISE_OPERATOR</operator>
+                    <operator>RELATIONAL_OPERATOR_REPLACEMENT</operator>
+                    <operator>UNARY_OPERATOR_INSERTION</operator>
                 </mutationOperators>
 
                 <outputFormats>
