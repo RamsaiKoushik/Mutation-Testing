@@ -174,30 +174,71 @@ public class GraphTest {
         assertFalse("The graph should not be bipartite", Graph.isBipartite(graph));
     }
 
-    // @Test
-    // public void isCycleTest3(){
-    //     ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-    //     for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
-    //     adj.get(0).add(1);
-    //     adj.get(1).add(2);
-    //     adj.get(2).add(3);
-    //     adj.get(3).add(0);
-    //     boolean result = Graph.isCycle(4,adj);
-    //     assertEquals(true, result);
-    // }
+    @Test
+    public void testFindOrder() {
+        // Test case 1: Valid order
+        int numCourses1 = 4;
+        int[][] prerequisites1 = {
+            {1, 0},
+            {2, 0},
+            {3, 1},
+            {3, 2}
+        };
+        int[] result1 = Graph.findOrder(numCourses1, prerequisites1);
+        assertTrue(isValidOrder(result1, numCourses1, prerequisites1));
 
-    // @Test
-    // public void isCycleTest4(){
-    //     ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-    //     for (int i = 0; i < 4; i++) adj.add(new ArrayList<>());
-    //     adj.get(0).add(1);
-    //     adj.get(1).add(2);
-    //     adj.get(2).add(3);
-    //     // adj.get(3).add(1);
-    //     boolean result = Graph.isCycle(4,adj);
-    //     assertEquals(false, result);
-    // }
+        // Test case 2: Impossible to complete all courses
+        int numCourses2 = 2;
+        int[][] prerequisites2 = {
+            {1, 0},
+            {0, 1}
+        };
+        int[] result2 = Graph.findOrder(numCourses2, prerequisites2);
+        assertArrayEquals(new int[0], result2);
 
+        // Test case 3: No prerequisites
+        int numCourses3 = 3;
+        int[][] prerequisites3 = {};
+        int[] result3 = Graph.findOrder(numCourses3, prerequisites3);
+        assertEquals(3, result3.length);
+
+        // Test case 4: Single course
+        int numCourses4 = 1;
+        int[][] prerequisites4 = {};
+        int[] result4 = Graph.findOrder(numCourses4, prerequisites4);
+        assertArrayEquals(new int[]{0}, result4);
+
+        // Test case 5: All courses independent
+        int numCourses5 = 3;
+        int[][] prerequisites5 = {
+            {1, 0},
+            {2, 0}
+        };
+        int[] result5 = Graph.findOrder(numCourses5, prerequisites5);
+        assertTrue(isValidOrder(result5, numCourses5, prerequisites5));
+    }
+
+    // Helper method to validate the topological order
+    private boolean isValidOrder(int[] order, int numCourses, int[][] prerequisites) {
+        if (order.length != numCourses) {
+            return false;
+        }
+
+        Map<Integer, Integer> position = new HashMap<>();
+        for (int i = 0; i < order.length; i++) {
+            position.put(order[i], i);
+        }
+
+        for (int[] prereq : prerequisites) {
+            int course = prereq[0];
+            int prereqCourse = prereq[1];
+            if (position.get(prereqCourse) > position.get(course)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     @Test
     public void eventualSafeNodesTest(){
@@ -267,12 +308,84 @@ public class GraphTest {
     }
 
     @Test
-    public void makeConnectedTest(){
-        int n = 6;
-        int[][] connections = {{0,1},{0,2},{0,3},{1,2},{1,3}};
-        int result = Graph.makeConnected(n, connections);
-        assertEquals(2, result);
-    }  
+    public void testBellmanFord() {
+        int V = 5;
+        List<int[]> edges = new ArrayList<>();
+        edges.add(new int[]{0, 1, -1});
+        edges.add(new int[]{0, 2, 4});
+        edges.add(new int[]{1, 2, 3});
+        edges.add(new int[]{1, 3, 2});
+        edges.add(new int[]{1, 4, 2});
+        edges.add(new int[]{3, 2, 5});
+        edges.add(new int[]{3, 1, 1});
+        edges.add(new int[]{4, 3, -3});
+
+        int S = 0;
+
+        List<Integer> expectedDistances = Arrays.asList(0, -1, 2, -2, 1);
+        List<Integer> result = Graph.bellmanFord(V, edges, S);
+
+        assertEquals(expectedDistances, result);
+
+        // Test case for negative-weight cycle
+        edges.add(new int[]{3, 0, -8}); // Adding a negative cycle
+        List<Integer> resultWithCycle = Graph.bellmanFord(V, edges, S);
+        assertEquals(Arrays.asList(-1), resultWithCycle); // Should return -1 indicating a negative cycle
+    }
+
+    // @Test
+    // public void makeConnectedTest(){
+    //     int n = 6;
+    //     int[][] connections = {{0,1},{0,2},{0,3},{1,2},{1,3}};
+    //     int result = Graph.countConnected(n, connections);
+    //     assertEquals(2, result);
+    // }  
+
+    @Test
+    public void testcountConnected() {
+        // Test case 1: Multiple connected components
+        int n1 = 6;
+        int[][] edges1 = {
+            {0, 1},
+            {1, 2},
+            {3, 4}
+        };
+        int expected1 = 3; // Three connected components: {0,1,2}, {3,4}, {5}
+        assertEquals(expected1, Graph.countConnected(n1, edges1));
+
+        // Test case 2: Fully connected graph
+        int n2 = 4;
+        int[][] edges2 = {
+            {0, 1},
+            {1, 2},
+            {2, 3}
+        };
+        int expected2 = 1; // One connected component
+        assertEquals(expected2, Graph.countConnected(n2, edges2));
+
+        // Test case 3: Disconnected graph with no edges
+        int n3 = 5;
+        int[][] edges3 = {};
+        int expected3 = 5; // Five connected components, as there are no edges
+        assertEquals(expected3, Graph.countConnected(n3, edges3));
+
+        // Test case 4: Single node
+        int n4 = 1;
+        int[][] edges4 = {};
+        int expected4 = 1; // Single connected component with just one node
+        assertEquals(expected4, Graph.countConnected(n4, edges4));
+
+        // Test case 5: Edge cases with duplicate edges
+        int n5 = 4;
+        int[][] edges5 = {
+            {0, 1},
+            {1, 2},
+            {2, 0}, // Cycle, but still one connected component
+            {3, 3}  // Self-loop
+        };
+        int expected5 = 2; // Two connected components: {0,1,2}, {3}
+        assertEquals(expected5, Graph.countConnected(n5, edges5));
+    }
 
     @Test
     public void testAccountsMerge() {

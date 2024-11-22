@@ -339,43 +339,6 @@ public class Graph {
         return distances;
     }
     
-    // public static boolean isBipartite(ArrayList<ArrayList<Integer>> graph) 
-    // { //https://leetcode.com/problems/is-graph-bipartite/
-    //     int[] colors = new int[graph.size()];
-    //     Arrays.fill(colors,-1);
-    //     for(int i=0;i<graph.size();i++)
-    //     {
-    //         if(colors[i]==-1)
-    //         {
-    //             if(!dfs(graph,colors,i))
-    //             {
-    //                 return false;
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
-
-    // public static boolean dfs(ArrayList<ArrayList<Integer>> graph,int[] colors,int node)
-    // {
-    //     colors[node] = 1;
-    //     for(int adjacent_node : graph.get(node))
-    //     {
-    //         if(colors[adjacent_node]==-1)
-    //         {
-    //             colors[adjacent_node] = 1-colors[node];
-    //             if(!dfs(graph,colors,adjacent_node))
-    //             {
-    //                 return false;
-    //             }
-    //         }
-    //         else if(colors[adjacent_node]==colors[node])
-    //         {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // }
 
     private static boolean isBipartiteHelper(int source, int[] color, List<List<Integer>> graph) {
         for (int neighbor : graph.get(source)) {
@@ -415,6 +378,51 @@ public class Graph {
         }
 
         return true;
+    }
+
+    public static int[] findOrder(int numCourses, int[][] prerequisites) {
+        List<List<Integer>> adjList = new ArrayList<>();
+        int[] inDegree = new int[numCourses];
+        int[] order = new int[numCourses];
+        
+        // Initialize adjacency list
+        for (int i = 0; i < numCourses; i++) {
+            adjList.add(new ArrayList<>());
+        }
+        
+        // Build the graph
+        for (int[] prereq : prerequisites) {
+            int course = prereq[0];
+            int prereqCourse = prereq[1];
+            adjList.get(prereqCourse).add(course);
+            inDegree[course]++;
+        }
+        
+        // Initialize the queue with courses having no prerequisites
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        
+        // Perform BFS for topological sorting
+        int index = 0;
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            order[index++] = current;
+            
+            // Reduce the in-degree of neighboring nodes
+            for (int neighbor : adjList.get(current)) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+        
+        // If topological sort includes all courses, return order
+        return index == numCourses ? order : new int[0];
     }
 
 
@@ -725,28 +733,49 @@ public class Graph {
         return res;
     }
 
-    private static int makeConnectedHelper(int u, List<Integer>[] graph, boolean[] visited) {
-        if (visited[u]) return 0;
-        visited[u] = true;
-        for (int v : graph[u]) makeConnectedHelper(v, graph, visited);
-        return 1;
+    public static List<Integer> bellmanFord(int V, List<int[]> edges, int S) {
+        int maxDistance = (int) 1e8; // Large value to represent infinity
+        List<Integer> distances = new ArrayList<>(Collections.nCopies(V, maxDistance));
+        distances.set(S, 0); // Distance to the source is 0
+
+        // Relax edges |V| - 1 times
+        for (int i = 0; i < V - 1; i++) {
+            for (int[] edge : edges) {
+                int u = edge[0], v = edge[1], weight = edge[2];
+                if (distances.get(u) != maxDistance && distances.get(u) + weight < distances.get(v)) {
+                    distances.set(v, distances.get(u) + weight);
+                }
+            }
+        }
+
+        // Check for negative-weight cycles
+        for (int[] edge : edges) {
+            int u = edge[0], v = edge[1], weight = edge[2];
+            if (distances.get(u) != maxDistance && distances.get(u) + weight < distances.get(v)) {
+                return Arrays.asList(-1); // Negative cycle detected
+            }
+        }
+
+        return distances;
     }
 
-    public static int makeConnected(int n, int[][] connections) { //https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
-        if (connections.length < n - 1) return -1;
-        List<Integer>[] graph = new List[n];
-        for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();
-        for (int[] c : connections) {
-            graph[c[0]].add(c[1]);
-            graph[c[1]].add(c[0]);
+
+    public static int countConnected(int n, int[][] edges) { //https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
+        DisjointSetUnion dsu = new DisjointSetUnion(n);
+
+        for (int[] edge : edges) {
+            dsu.union(edge[0], edge[1]);
         }
-        
-        int components = 0;
-        boolean[] visited = new boolean[n];
-        for (int v = 0; v < n; v++) components += makeConnectedHelper(v, graph, visited);
-        return components - 1;
+
+        Set<Integer> components = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            components.add(dsu.find(i));
+        }
+
+        return components.size();
     }
     
+
     public static List<List<String>> accountsMerge(List<List<String>> accounts) {
         Map<String, Integer> emailToIndex = new HashMap<>();
         Map<String, String> emailToName = new HashMap<>();
@@ -864,7 +893,6 @@ public class Graph {
                 }
             }
         }
-    
         return maxIsland;
     }    
 }
