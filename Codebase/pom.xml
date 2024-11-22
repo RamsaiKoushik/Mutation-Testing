@@ -63,30 +63,18 @@
                     <operator>MATH</operator>
                     <operator>NEGATE_CONDITIONALS</operator>
                     <operator>RETURN_VALUES</operator>
+                    <operator>RELATIONAL_OPERATOR_REPLACEMENT</operator>
+                    <operator>REMOVE_CONDITIONALS</operator>
+                    <operator>EXPERIMENTAL_ARGUMENT_PROPAGATION</operator>
                     <operator>VOID_METHOD_CALLS</operator>
+                    <operator>NON_VOID_METHOD_CALLS</operator>
+                    <operator>CONSTRUCTOR_CALLS</operator>
                     <operator>EMPTY_RETURNS</operator>
                     <operator>FALSE_RETURNS</operator>
                     <operator>TRUE_RETURNS</operator>
                     <operator>NULL_RETURNS</operator>
-                    <operator>PRIMITIVE_RETURNS</operator>
-                    <operator>REMOVE_CONDITIONALS</operator>
-                    <operator>EXPERIMENTAL_SWITCH</operator>
-                    <operator>INLINE_CONSTANT</operator>
-                    <operator>CONSTRUCTOR_CALLS</operator>
-                    <operator>NON_VOID_METHOD_CALLS</operator>
-                    <operator>REMOVE_INCREMENTS</operator>
-                    <operator>EXPERIMENTAL_ARGUMENT_PROPAGATION</operator>
-                    <operator>EXPERIMENTAL_BIG_INTEGER</operator>
-                    <operator>EXPERIMENTAL_MEMBER_VARIABLE</operator>
-                    <operator>EXPERIMENTAL_NAKED_RECEIVER</operator>
-                    <operator>NEGATION</operator>
-                    <operator>ARITHMETIC_OPERATOR_REPLACEMENT</operator>
-                    <operator>ARITHMETIC_OPERATOR_DELETION</operator>
-                    <operator>CONSTANT_REPLACEMENT</operator>
-                    <operator>BITWISE_OPERATOR</operator>
-                    <operator>RELATIONAL_OPERATOR_REPLACEMENT</operator>
-                    <operator>UNARY_OPERATOR_INSERTION</operator>
                 </mutationOperators>
+
 
                 <outputFormats>
                     <param>HTML</param>
