@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.GraphTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 26, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.443 sec
-=======
-Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.109 s -- in com.example.GraphTest
->>>>>>> c81f69e0da347fe7d9d90aca8b2f14d68b0bc3ab
+Tests run: 34, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.087 s -- in com.example.GraphTest

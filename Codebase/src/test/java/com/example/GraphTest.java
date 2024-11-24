@@ -120,6 +120,13 @@ public class GraphTest {
     }
 
     @Test
+    public void orangesRottingTest2(){
+        int[][] grid = {{2,1,1},{0,1,1},{1,0,1}}; 
+        int result = Graph.orangesRotting(grid);
+        assertEquals(-1, result);
+    }
+
+    @Test
     public void surroundedRegionsTest(){
         char[][] board = {{'X','X','X','X'},{'X','O','O','X'},{'X','X','O','X'},{'X','O','X','X'}};
         Graph.surroundedRegions(board);
@@ -156,6 +163,16 @@ public class GraphTest {
         assertTrue("The graph should be bipartite", Graph.isBipartite(graph));
     }
 
+    @Test
+    public void testNonBipartiteGraph() {
+        int[][] graph = {
+            {1, 2}, // Neighbors of node 0
+            {0, 2}, // Neighbors of node 1
+            {0, 1}  // Neighbors of node 2
+        };
+        boolean result = Graph.isBipartite(graph);
+        assertFalse(result);
+    }
     @Test
     public void testIsBipartiteFalse() {
         // Test Case 2: Non-Bipartite Graph (Should return false)
@@ -261,6 +278,33 @@ public class GraphTest {
 
 
     @Test
+    public void shortestPathBinaryMatrixTest1(){
+        int[][] grid = {{0,0,0},{0,1,0},{1,1,1}};
+        int result = Graph.shortestPathBinaryMatrix(grid);
+        assertEquals(-1, result);
+    }
+
+    @Test
+    public void shortestPathBinaryMatrixTest2(){
+        int[][] grid = {{1,0,0},{1,1,0},{1,1,0}};
+        int result = Graph.shortestPathBinaryMatrix(grid);
+        assertEquals(-1, result);
+    }
+
+    @Test
+    public void shortestPathBinaryMatrixTest3(){
+        int[][] grid = {{0,0,0}};
+        int result = Graph.shortestPathBinaryMatrix(grid);
+        assertEquals(1, result);
+    }
+
+    @Test
+    public void shortestPathBinaryMatrixTest4(){
+        int[][] grid = {};
+        int result = Graph.shortestPathBinaryMatrix(grid);
+        assertEquals(-1, result);
+    }
+    @Test
     public void findCheapestPriceTest(){
         int[][] flights = {{0,1,100},{1,2,100},{2,0,100},{1,3,600},{2,3,200}};
         int result = Graph.findCheapestPrice(4, flights, 0, 3, 1);
@@ -274,6 +318,50 @@ public class GraphTest {
         assertEquals(2, result);
     }
 
+    // @Test
+    // public void testMinimumEffortPath() {
+    //     // Define a grid with specific effort requirements
+    //     int[][] heights = {
+    //         {1, 10, 6, 7},
+    //         {10, 3, 1, 8},
+    //         {6, 1, 2, 3},
+    //         {7, 3, 8, 1}
+    //     };
+
+    //     // Expected result is 5
+    //     // Path: (0,0) -> (1,1) -> (2,2) -> (3,3)
+    //     // The maximum effort along this path is |1 - 3| = 5
+    //     int expected = 5;
+
+    //     // Run the method and verify correctness
+    //     assertEquals(expected, Graph.minimumEffortPath(heights));
+    // }
+
+    @Test
+    public void testEdgeCaseSingleCell() {
+        // Single-cell grid
+        int[][] heights = {{1}};
+        
+        // Expected result is 0 because there's no movement
+        assertEquals(0, Graph.minimumEffortPath(heights));
+    }
+
+    @Test
+    public void testLargeEffortDifference() {
+        // Define a grid with a large difference that should not mislead the algorithm
+        int[][] heights = {
+            {1, 2, 2},
+            {3, 8, 2},
+            {5, 3, 5}
+        };
+
+        // Expected result is 2
+        // Path: (0,0) -> (0,1) -> (0,2) -> (1,2) -> (2,2)
+        // The maximum effort along this path is |2 - 2| = 2
+        int expected = 2;
+
+        assertEquals(expected, Graph.minimumEffortPath(heights));
+    }
     @Test
     public void networkDelayTimeTest(){
         int[][] times = {{2,1,1},{2,3,1},{3,4,1}};

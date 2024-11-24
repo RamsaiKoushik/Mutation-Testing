@@ -481,7 +481,7 @@ public class Graph {
     public static int shortestPathBinaryMatrix(int[][] grid)
     { //https://leetcode.com/problems/shortest-path-in-binary-matrix/
         int n = grid.length;
-        if(grid[0][0] == 1 || grid[n - 1][n - 1] == 1) 
+        if(n!=0 && grid[0][0] == 1 || n!=0 && grid[n - 1][n - 1] == 1) 
         {
             return -1;
         }
@@ -491,7 +491,7 @@ public class Graph {
         }
         Deque<int[]> queue = new ArrayDeque<>(); 
         queue.add(new int[] {0, 0, 1});
-        while(!queue.isEmpty()) 
+        while(n!=0 && !queue.isEmpty()) 
         {
             int[] curr = queue.pollFirst();
             int r = curr[0];
