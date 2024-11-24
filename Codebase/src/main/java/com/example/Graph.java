@@ -895,4 +895,67 @@ public class Graph {
         }
         return maxIsland;
     }    
+
+    public static List<Integer> loudAndRich(int[][] richer, ArrayList<Integer> quiet) {
+        int n = quiet.size();
+        List<List<Integer>> graph = new ArrayList<>(n);
+        List<Integer> res = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+            res.add(i);
+        }
+        int[] indegree = new int[n];
+        for (int[] edge : richer) {
+            graph.get(edge[0]).add(edge[1]);
+            indegree[edge[1]]++;
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0) q.add(i);
+        }
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            for (int v : graph.get(u)) {
+                if (quiet.get(v) > quiet.get(u)) {
+                    quiet.set(v, quiet.get(u));
+                    res.set(v, res.get(u));
+                }
+                indegree[v]--;
+                if (indegree[v] == 0) q.offer(v);
+            }
+        }
+        return res;
+    }
+
+    public static List<List<Integer>> getAncestors(int n, int[][] edges) {
+        List<Set<Integer>> map = new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        boolean[] visited = new boolean[n];
+
+        for (int i = 0; i < n; i++) {
+            map.add(new HashSet<>());
+            res.add(new ArrayList<>());
+        }
+
+        for (int[] edge : edges) {
+            map.get(edge[0]).add(edge[1]);
+        }
+
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(visited, false);
+            dfs(i, i, map, res, visited);
+        }
+
+        return res;
+    }
+
+    private static void dfs(int v, int p, List<Set<Integer>> map, List<List<Integer>> res, boolean[] visited) {
+        visited[v] = true;
+        if (v != p) res.get(v).add(p);
+        for (int x : map.get(v)) {
+            if (!visited[x]) {
+                dfs(x, p, map, res, visited);
+            }
+        }
+    }
 }

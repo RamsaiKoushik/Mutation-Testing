@@ -1,22 +1,16 @@
 package com.example;
-import java.beans.Transient;
-import java.lang.annotation.Target;
-import java.util.Comparator;
-import java.util.Collections;
-// import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.*;
-// import src.main.java.com.example.Graph;
-// import java.awt.desktop.ScreenSleepEvent.main
-// import java.awt.desktop.ScreenSleepEvent.
+import java.util.Map;
+import java.util.Set;
 
-// import src.main.java.com.example.GraphUnit;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class GraphTest {
@@ -447,5 +441,39 @@ public class GraphTest {
             {1, 1}
         };
         assertEquals(4, Graph.largestIsland(grid3));
+    }
+
+
+    @Test
+    public void loudAndRichtest() {
+        int[][] richer = {
+            {1, 0},
+            {2, 1},
+            {3, 1},
+            {3, 7},
+            {4, 3},
+            {5, 3},
+            {6, 3}
+        };
+        // 
+        ArrayList<Integer> quiet = new ArrayList<>(Arrays.asList(3, 2, 5, 4, 6, 1, 7, 0));
+        // assertEquals(5, Graph.loudAndRich(richer, quiet));
+        ArrayList<Integer> ans = new ArrayList<>(Arrays.asList(5, 5, 2, 5, 4, 5, 6, 7));
+        assertEquals(ans, Graph.loudAndRich(richer, quiet));
+    }
+
+
+    @Test
+    public void testGetAncestors() {
+        int[][] edges = {{0, 1}, {0, 2}, {0, 3}, {1, 4}};
+        List<List<Integer>> expected = Arrays.asList(
+            Arrays.asList(),
+            Arrays.asList(0),
+            Arrays.asList(0),
+            Arrays.asList(0),
+            Arrays.asList(0, 1)
+        );
+        List<List<Integer>> result = Graph.getAncestors(5, edges);
+        assertEquals(expected, result);
     }
 }
