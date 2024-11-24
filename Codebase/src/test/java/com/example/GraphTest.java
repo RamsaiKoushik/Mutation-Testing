@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Comparator;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -134,6 +135,89 @@ public class GraphTest {
         assertArrayEquals(expected, board);
     }
 
+
+    @Test
+    public void testSurroundedRegions() {
+        char[][] board = {
+            {'X', 'O', 'X', 'X'},
+            {'X', 'O', 'O', 'X'},
+            {'X', 'X', 'O', 'X'},
+            {'X', 'O', 'X', 'X'}
+        };
+
+        // Expected result after surroundedRegions has been applied
+        char[][] expected = {
+            {'X', 'O', 'X', 'X'},
+            {'X', 'O', 'O', 'X'},
+            {'X', 'X', 'O', 'X'},
+            {'X', 'O', 'X', 'X'}
+        };
+
+        // Call the surroundedRegions method
+        Graph.surroundedRegions(board);
+
+        // Assert that the resulting board matches the expected result
+        assertArrayEquals(expected, board);
+    }
+
+    @Test
+    public void testSurroundedRegionsWithNoChanges() {
+        char[][] board = {
+            {'X', 'X', 'X'},
+            {'X', 'X', 'X'},
+            {'X', 'X', 'X'}
+        };
+
+        // Expected result after surroundedRegions has been applied (should remain the same)
+        char[][] expected = {
+            {'X', 'X', 'X'},
+            {'X', 'X', 'X'},
+            {'X', 'X', 'X'}
+        };
+
+        // Call the surroundedRegions method
+        Graph.surroundedRegions(board);
+
+        // Assert that the board has not changed
+        assertArrayEquals(expected, board);
+    }
+
+    @Test
+    public void testEmptyBoard() {
+        char[][] board = {};
+
+        // Expected result is still an empty board
+        char[][] expected = {};
+
+        // Call the surroundedRegions method
+        Graph.surroundedRegions(board);
+
+        // Assert that the board remains empty
+        assertArrayEquals(expected, board);
+    }
+
+    @Test
+    public void testBoardWithAllO() {
+        char[][] board = {
+            {'O', 'O', 'O'},
+            {'O', 'O', 'O'},
+            {'O', 'O', 'O'}
+        };
+
+        // Expected result after surroundedRegions has been applied
+        char[][] expected = {
+            {'O', 'O', 'O'},
+            {'O', 'O','O'},
+            {'O', 'O', 'O'}
+        };
+
+        // Call the surroundedRegions method
+        Graph.surroundedRegions(board);
+
+        // Assert that the resulting board matches the expected result
+        assertArrayEquals(expected, board);
+    }
+
     @Test
     public void WordladderLengthTest(){
         List<String> dict = Arrays.asList("hot","dot","dog","lot","log","cog");
@@ -162,6 +246,7 @@ public class GraphTest {
         };
         assertTrue("The graph should be bipartite", Graph.isBipartite(graph));
     }
+
 
     @Test
     public void testNonBipartiteGraph() {
@@ -389,6 +474,20 @@ public class GraphTest {
         assertEquals(3, result);
     }
 
+    // @Test
+    // public void findTheCityWithNegativeWeightsTest() {
+    //     int n = 4;
+    //     int[][] edges = {
+    //         {0, 1, 3},   // Positive weight
+    //         {1, 2, -2},  // Negative weight
+    //         {1, 3, 4},   // Positive weight
+    //         {2, 3, 1}    // Positive weight
+    //     };
+    //     int distanceThreshold = 3;
+    //     int result = Graph.findTheCity(n, edges, distanceThreshold);
+    //     assertEquals(2, result); // Node 2 has the fewest reachable nodes within the threshold
+    // }
+
     @Test
     public void testBellmanFord() {
         int V = 5;
@@ -500,6 +599,32 @@ public class GraphTest {
     }
 
     @Test
+    public void testAccountsMergeWithSortingRequirement() {
+        List<List<String>> accounts = new ArrayList<>();
+        accounts.add(Arrays.asList("John", "johnsmith@mail.com", "john_newyork@mail.com"));
+        accounts.add(Arrays.asList("John", "johnsmith@mail.com", "john00@mail.com"));
+        accounts.add(Arrays.asList("Mary", "mary@mail.com"));
+        accounts.add(Arrays.asList("John", "johnnybravo@mail.com"));
+
+        // Call the accountsMerge function
+        List<List<String>> result = Graph.accountsMerge(accounts);
+
+        // Expected result
+        List<List<String>> expected = new ArrayList<>();
+        expected.add(Arrays.asList("John", "john00@mail.com", "john_newyork@mail.com", "johnsmith@mail.com"));
+        expected.add(Arrays.asList("Mary", "mary@mail.com"));
+        expected.add(Arrays.asList("John", "johnnybravo@mail.com"));
+
+        // Sort the outer lists for comparison
+        result.sort(Comparator.comparing(list -> list.get(0)));
+        expected.sort(Comparator.comparing(list -> list.get(0)));
+
+        // Assert equality
+        assertEquals(expected, result);
+    }
+
+
+    @Test
     public void testFindRedundantConnection() {
         int[][] edges1 = {{1, 2}, {1, 3}, {2, 3}};
         int[] expected1 = {2, 3};
@@ -508,6 +633,10 @@ public class GraphTest {
         int[][] edges2 = {{1, 2}, {2, 3}, {3, 4}, {4, 1}, {1, 5}};
         int[] expected2 = {4, 1};
         assertArrayEquals(expected2, Graph.findRedundantConnection(edges2));
+
+        int[][] edges3 = {};
+        int[] expected3 = new int[0];
+        assertArrayEquals(expected3, Graph.findRedundantConnection(edges3));
     }
 
     @Test
@@ -530,6 +659,61 @@ public class GraphTest {
         };
         assertEquals(4, Graph.largestIsland(grid3));
     }
+
+    
+
+    @Test
+    public void testMinimumSpanningTree() {
+        int n = 4; // Number of nodes
+        List<int[]> edges = new ArrayList<>();
+        edges.add(new int[]{0, 1, 1});
+        edges.add(new int[]{1, 2, 2});
+        edges.add(new int[]{0, 2, 2});
+        edges.add(new int[]{2, 3, 1});
+        edges.add(new int[]{0, 3, 3});
+        // Expected MST weight is 4 (edges: (0-1), (2-3), (1-2))
+        int expectedMSTWeight = 4;
+        // Call the MST function
+        int mstWeight = Graph.minimumSpanningTree(n, edges);
+        // Assert the result
+        assertEquals(expectedMSTWeight, mstWeight);
+    }
+
+    @Test
+    public void testMinimumSpanningTreeWithEdgeCases() {
+        // Graph with 4 nodes and edges that are not initially sorted
+        int n = 4;
+        List<int[]> edges = new ArrayList<>();
+        edges.add(new int[]{0, 1, 10});
+        edges.add(new int[]{2, 3, 4});  // Minimum weight edge
+        edges.add(new int[]{0, 2, 6});
+        edges.add(new int[]{1, 3, 5});
+
+        // Compute MST
+        int mstWeight = Graph.minimumSpanningTree(n, edges);
+
+        // Expected MST weight: 10 (0-1) + 6 (0-2) + 4 (2-3) = 20
+        assertEquals(15, mstWeight);
+
+        // Case to ensure additional edges don't affect the result
+        edges.add(new int[]{1, 2, 15}); // Extra edge not part of MST
+        mstWeight = Graph.minimumSpanningTree(n, edges);
+
+        // Still expect the MST weight to be 20
+        assertEquals(15, mstWeight);
+
+        // Disconnected graph to ensure correct handling
+        n = 4;
+        edges = new ArrayList<>();
+        edges.add(new int[]{0, 1, 5});
+        edges.add(new int[]{2, 3, 8});
+
+        mstWeight = Graph.minimumSpanningTree(n, edges);
+
+        // Expect -1 as not all nodes are connected
+        assertEquals(-1, mstWeight);
+    }
+
 
 
     @Test

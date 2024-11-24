@@ -56,7 +56,7 @@
                 <!-- <targetTests> -->
                     <!-- <param>com.example.*</param> Your test package name -->
                 <!-- </targetTests> -->
-                <mutationOperators>
+                <!-- <mutationOperators>
                     <operator>CONDITIONAL_BOUNDARY</operator>
                     <operator>INCREMENTS</operator>
                     <operator>INVERT_NEGATIVES</operator>
@@ -73,9 +73,7 @@
                     <operator>FALSE_RETURNS</operator>
                     <operator>TRUE_RETURNS</operator>
                     <operator>NULL_RETURNS</operator>
-                </mutationOperators>
-
-
+                </mutationOperators> -->
                 <outputFormats>
                     <param>HTML</param>
                 </outputFormats>

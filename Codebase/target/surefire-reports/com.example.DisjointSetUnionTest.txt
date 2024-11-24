@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: com.example.GraphTest
+Test set: com.example.DisjointSetUnionTest
 -------------------------------------------------------------------------------
-Tests run: 41, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in com.example.GraphTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.055 s -- in com.example.DisjointSetUnionTest

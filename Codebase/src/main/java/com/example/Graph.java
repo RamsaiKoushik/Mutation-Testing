@@ -197,7 +197,7 @@ public class Graph {
         {
             int ix = i + d[0];
             int jy = j + d[1];
-            if (ix > 0 && ix < m - 1 && jy > 0 && jy < n - 1 && board[ix][jy] == 'O') 
+            if (ix >= 0 && ix <= m - 1 && jy >= 0 && jy <= n - 1 && board[ix][jy] == 'O') 
             {
                 surroundedRegionsHelp(board, ix, jy);
             }
@@ -894,7 +894,30 @@ public class Graph {
             }
         }
         return maxIsland;
-    }    
+    }  
+    
+    public static int minimumSpanningTree(int n, List<int[]> edges) {
+        // Sort edges by weight
+        edges.sort(Comparator.comparingInt(e -> e[2]));
+        // Initialize DSU
+        DisjointSetUnion dsu = new DisjointSetUnion(n);
+        int mstWeight = 0;
+        int edgeCount = 0;
+        for (int[] edge : edges) {
+            int src = edge[0];
+            int dest = edge[1];
+            int weight = edge[2];
+            if (dsu.find(src) != dsu.find(dest)) {
+                dsu.union(src, dest);
+                mstWeight += weight;
+                edgeCount++;
+                // MST complete when we have n - 1 edges
+                if (edgeCount == n - 1) break;
+            }
+        }
+        // If not all nodes are connected, return -1
+        return edgeCount == n - 1 ? mstWeight : -1;
+    }
 
     public static List<Integer> loudAndRich(int[][] richer, ArrayList<Integer> quiet) {
         int n = quiet.size();
