@@ -448,4 +448,24 @@ public class GraphTest {
         };
         assertEquals(4, Graph.largestIsland(grid3));
     }
+
+    @Test
+    public void testMinimumSpanningTree() {
+        int n = 4; // Number of nodes
+        List<int[]> edges = new ArrayList<>();
+        edges.add(new int[]{0, 1, 1});
+        edges.add(new int[]{1, 2, 2});
+        edges.add(new int[]{0, 2, 2});
+        edges.add(new int[]{2, 3, 1});
+        edges.add(new int[]{0, 3, 3});
+
+        // Expected MST weight is 4 (edges: (0-1), (2-3), (1-2))
+        int expectedMSTWeight = 4;
+
+        // Call the MST function
+        int mstWeight = Graph.minimumSpanningTree(n, edges);
+
+        // Assert the result
+        assertEquals(expectedMSTWeight, mstWeight);
+    }
 }

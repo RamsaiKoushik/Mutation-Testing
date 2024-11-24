@@ -894,5 +894,34 @@ public class Graph {
             }
         }
         return maxIsland;
-    }    
+    }
+    
+    public static int minimumSpanningTree(int n, List<int[]> edges) {
+        // Sort edges by weight
+        edges.sort(Comparator.comparingInt(e -> e[2]));
+
+        // Initialize DSU
+        DisjointSetUnion dsu = new DisjointSetUnion(n);
+
+        int mstWeight = 0;
+        int edgeCount = 0;
+
+        for (int[] edge : edges) {
+            int src = edge[0];
+            int dest = edge[1];
+            int weight = edge[2];
+
+            if (dsu.find(src) != dsu.find(dest)) {
+                dsu.union(src, dest);
+                mstWeight += weight;
+                edgeCount++;
+
+                // MST complete when we have n - 1 edges
+                if (edgeCount == n - 1) break;
+            }
+        }
+
+        // If not all nodes are connected, return -1
+        return edgeCount == n - 1 ? mstWeight : -1;
+    }
 }
