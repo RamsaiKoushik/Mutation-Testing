@@ -478,51 +478,70 @@ public class Graph {
     }
 
 
-    public static int shortestPathBinaryMatrix(int[][] grid)
-    { //https://leetcode.com/problems/shortest-path-in-binary-matrix/
-        int n = grid.length;
-        if(n!=0 && grid[0][0] == 1 || n!=0 && grid[n - 1][n - 1] == 1) 
+    // BFS algorithm for shortest path
+    //https://leetcode.com/problems/shortest-path-in-binary-matrix/
+    public static int shortestPathBinaryMatrix(int[][] grid) 
+    {
+        int n = grid.length; // Get the size of the grid
+
+        // Check if the start or end cell is blocked
+        if (n != 0 && grid[0][0] == 1 || n != 0 && grid[n - 1][n - 1] == 1) 
         {
             return -1;
         }
-        if(n == 1 && grid[0][0] == 0)
+
+        // Special case: single cell that is unblocked
+        if (n == 1 && grid[0][0] == 0) 
         {
             return 1;
         }
-        Deque<int[]> queue = new ArrayDeque<>(); 
-        queue.add(new int[] {0, 0, 1});
-        while(n!=0 && !queue.isEmpty()) 
+
+        // Initialize the queue for BFS with the starting cell
+        Deque<int[]> queue = new ArrayDeque<>();
+        queue.add(new int[] {0, 0, 1}); // Add {row, column, distance}
+
+        // Perform BFS
+        while (n != 0 && !queue.isEmpty()) 
         {
-            int[] curr = queue.pollFirst();
+            int[] curr = queue.pollFirst(); // Get the current cell
             int r = curr[0];
             int c = curr[1];
             int dist = curr[2];
 
-            for(int i = r - 1; i <= r + 1; i++) 
+            // Explore all 8 possible directions
+            for (int i = r - 1; i <= r + 1; i++) 
             {
-                for(int j = c - 1; j <= c + 1; j++) 
+                for (int j = c - 1; j <= c + 1; j++) 
                 {
-                    if(i == -1 || i == n || j == -1 || j == n || grid[i][j] == 1) 
+                    // Skip invalid or blocked cells
+                    if (i == -1 || i == n || j == -1 || j == n || grid[i][j] == 1) 
                     {
                         continue;
                     }
-                    if(n - 1 == i && n - 1 == j)
+
+                    // Check if the end cell is reached
+                    if (n - 1 == i && n - 1 == j) 
                     { 
                         return dist + 1;
-                    }
+                    } 
                     else 
                     {
+                        // Add the cell to the queue and mark it as visited
                         queue.add(new int[] {i, j, dist + 1});
                         grid[i][j] = 1; 
                     }
                 }
             }
         }
+        // If no path exists, return -1
         return -1;
     }
 
-    public static int findCheapestPrice(int n, int[][] flights, int src, int dst, int k)
-     { //https://leetcode.com/problems/cheapest-flights-within-k-stops/
+    // BFS algorithm with constraints
+    //https://leetcode.com/problems/cheapest-flights-within-k-stops/
+    public static int findCheapestPrice(int n, int[][] flights, int src, int dst, int k)  
+    { 
+        // Create adjacency list for the graph
         List<List<int[]>> adj = new ArrayList<>();
         for (int i = 0; i < n; i++) 
         {
@@ -530,37 +549,49 @@ public class Graph {
         }
         for (int[] flight : flights) 
         {
-            adj.get(flight[0]).add(new int[] {flight[1], flight[2]});
+            adj.get(flight[0]).add(new int[] {flight[1], flight[2]}); // {destination, cost}
         }
+
+        // Initialize queue for BFS and minimum cost array
         Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[] {src, 0});
+        q.offer(new int[] {src, 0}); // {current node, current cost}
         int[] minCost = new int[n];
         Arrays.fill(minCost, Integer.MAX_VALUE);
-        int stops = 0;
-        while (!q.isEmpty() && stops <= k)
+
+        int stops = 0; // Track the number of stops
+
+        // Perform BFS up to k stops
+        while (!q.isEmpty() && stops <= k) 
         {
             int size = q.size();
-            while (size-- > 0)
+            while (size-- > 0) 
             {
-                int[] curr = q.poll();
+                int[] curr = q.poll(); // Current node and cost
                 for (int[] neighbour : adj.get(curr[0])) 
                 {
-                    int price = neighbour[1], neighbourNode = neighbour[0];
-                    if (price + curr[1] >= minCost[neighbourNode])
+                    int price = neighbour[1];
+                    int neighbourNode = neighbour[0];
+
+                    // Skip if the cost is not better
+                    if (price + curr[1] >= minCost[neighbourNode]) 
                     {
                         continue;
                     }
+
+                    // Update minimum cost and enqueue the neighbor
                     minCost[neighbourNode] = price + curr[1];
                     q.offer(new int[] {neighbourNode, minCost[neighbourNode]});
                 }
             }
             stops++;
         }
+
+        // Return the result based on whether a path exists
         return minCost[dst] == Integer.MAX_VALUE ? -1 : minCost[dst];
     }
 
     public static int minimumEffortPath(final int[][] heights) { //https://leetcode.com/problems/path-with-minimum-effort/
-        final int[][] DIRECTIONS = new int[][] { { 0, 1 }, { 1, 0 }, { -1, 0 }, { 0, -1 } };
+        final int[][] directions = new int[][] { { 0, 1 }, { 1, 0 }, { -1, 0 }, { 0, -1 } };
         final int m = heights.length, n = heights[0].length;
         final int[][] h = new int[m][n];
 
@@ -582,8 +613,8 @@ public class Graph {
             if(y == m - 1 && x == n - 1)
                 return currEffort;
 
-            for(final int[] DIRECTION : DIRECTIONS) {
-                final int ny = y + DIRECTION[0], nx = x + DIRECTION[1];
+            for(final int[] direction : directions) {
+                final int ny = y + direction[0], nx = x + direction[1];
 
                 if(ny >= 0 && nx >= 0 && ny < m && nx < n) {
                     final int newEffort = Math.max(currEffort, Math.abs(heights[y][x] - heights[ny][nx]));
